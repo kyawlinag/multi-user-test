@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +20,26 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/',[AuthController::class,'login']);
+Route::post('/login',[AuthController::class,'AuthLogin']);
+Route::get('/logout',[AuthController::class,'Logout']);
+
+// End for login
+
+// Route::get('admin/dashboard',function(){
+//     return view('admin.dashboard');
+// });
+
+// Route::get('admin/admin/list',function(){
+//     return view('admin.admin.list');
+// });
+
+Route::group(['middleware' => 'admin'],function()
+{
+    Route::get('/admin/dashboard',[DashboardController::class,'dashboard']);
+});
+
+Route::group(['middleware' => 'editor'],function()
+{
+    Route::get('/editor/dashboard',[DashboardController::class,'dashboard']);
 });
